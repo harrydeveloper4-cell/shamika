@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PropertyManagementTeam;
 
 use App\Http\Controllers\Controller;
 use App\Models\Inspection;
+use App\Models\MonitoringRequest;
 use App\Services\InspectionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -33,13 +34,10 @@ class InspectionController extends Controller
     public function schedule(Inspection $inspection, Request $request)
     {
         Gate::authorize('schedule assigned inspection', $inspection);
-
         $request->validate([
             'scheduled_at' => 'required|date|after_or_equal:today',
         ]);
-
         $this->inspectionService->scheduleInspection($inspection, $request->scheduled_at);
-
         return back()->with('success', 'Inspection scheduled successfully.');
     }
 

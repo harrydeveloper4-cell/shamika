@@ -34,14 +34,14 @@ class CommissionSettingController extends Controller
     public function store(Request $request)
     {
         Gate::authorize('manage commissions');
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255|unique:commission_settings,name',
             'type' => 'required|in:fixed,percentage',
             'value' => 'required|numeric|min:0',
             'is_active' => 'boolean',
         ]);
 
-        CommissionSetting::create($request->all());
+        CommissionSetting::create($validated);
 
         return redirect()->route('admin.commission-settings.index')->with('success', 'Commission Setting created successfully.');
     }

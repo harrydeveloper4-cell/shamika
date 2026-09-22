@@ -6,6 +6,7 @@ use App\Http\Controllers\Renter\PropertySearchController;
 Route::middleware(['web', 'auth', 'role:renter'])->prefix('renter')->name('renter.')->group(function () {
     Route::get('/properties', [PropertySearchController::class, 'index'])->name('properties.index');
     Route::get('/properties/{property}', [PropertySearchController::class, 'show'])->name('properties.show');
+    Route::post('/properties/{property}/request-viewing', [PropertySearchController::class, 'requestViewing'])->name('properties.requestViewing');
 });
 
 // Public routes for property search and viewing (without authentication)

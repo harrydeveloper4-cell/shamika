@@ -24,6 +24,7 @@ class PropertyImage extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return Storage::disk('public')->url($this->image_path);
+        // return Storage::disk('public')->url($this->image_path);
+        return asset($this->image_path);
     }
 }

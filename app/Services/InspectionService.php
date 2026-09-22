@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Inspection;
 use App\Models\Property;
+use App\Models\MonitoringRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
@@ -17,17 +18,23 @@ class InspectionService
      * @return Inspection
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function assignInspection(Property $property, User $inspector): Inspection
+    public function assignInspection(Property $property, User $inspector, MonitoringRequest $monitoringRequest = null): Inspection
     {
         // Only Admin can assign inspections, this will be checked via policy on MonitoringRequest for assigning inspections.
         // Here, we assume the check has passed.
 
-        // Create the inspection record
-        $inspection = Inspection::create([
+        $inspectionData = [
             'property_id' => $property->id,
             'inspector_id' => $inspector->id,
             'status' => 'Assigned',
-        ]);
+        ];
+
+        if ($monitoringRequest && $monitoringRequest->renter_id) {
+            $inspectionData['renter_id'] = $monitoringRequest->renter_id;
+        }
+
+        // Create the inspection record
+        $inspection = Inspection::create($inspectionData);
 
         // Update property inspection status if necessary
         if ($property->inspection_status === 'Assigned') {

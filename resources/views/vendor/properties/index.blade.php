@@ -54,27 +54,39 @@
                                     <div class="flex flex-wrap gap-2 mb-4">
                                         <span class="px-2 py-0.5 text-xs rounded bg-gray-100 text-gray-700">{{ ucfirst($property->type) }}</span>
                                         <span class="px-2 py-0.5 text-xs rounded {{ $property->purpose === 'rent' ? 'bg-purple-100 text-purple-700' : 'bg-orange-100 text-orange-700' }}">For {{ ucfirst($property->purpose) }}</span>
+                                        @if($property->inspections()->count() > 0)
                                         <span class="px-2 py-0.5 text-xs rounded
-                                            {{ $property->verification_status === 'Verified' ? 'bg-green-100 text-green-700' :
-                                               ($property->verification_status === 'Rejected' ? 'bg-red-100 text-red-700' :
-                                               ($property->verification_status === 'Under Review' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700')) }}">
-                                            {{ $property->verification_status ?? 'Pending' }}
-                                            @if($property->is_verified) ✓ @endif
+                                            {{ $property->inspections[0]->recommendation === 'approve' ? 'bg-green-100 text-green-700' :
+                                               ($property->inspections[0]->recommendation === 'rejecte' ? 'bg-red-100 text-red-700' :
+                                               ($property->inspections[0]->recommendation === 'pending' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700')) }}">
+                                            {{ ucfirst($property->inspections[0]->recommendation) }}
+                                            @if($property->inspections[0]->recommendation === 'approve') ✓ @endif
                                         </span>
-                                        @if($property->archived_at)
-                                            <span class="px-2 py-0.5 text-xs rounded bg-gray-300 text-gray-700">Archived</span>
+                                        @endif
+
+                                        @if($property->monitoringRequests->count() > 0)
+                                            <div class="w-full mt-2">
+                                                <p class="text-xs font-semibold text-gray-600">Monitoring Requests:</p>
+                                                @foreach($property->monitoringRequests as $mr)
+                                                    <div class="flex justify-between items-center text-xs mt-1">
+                                                        <span>
+                                                            {{ $mr->renter ? $mr->renter->name . ' (Renter)' : 'Vendor' }} - Status: {{ ucfirst($mr->status) }}
+                                                        </span>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                        <span class="px-2 py-0.5 text-xs rounded bg-yellow-100 text-yellow-700">
+                                            Required to verification
+                                        </span>
                                         @endif
                                     </div>
                                     <div class="flex gap-2 text-sm">
+                                        <a href="{{ route('vendor.properties.show', $property) }}" class="flex-1 text-center px-3 py-1.5 bg-gray-800 text-white rounded-md hover:bg-gray-700">View</a>
+                                        
                                         <a href="{{ route('vendor.properties.edit', $property) }}" class="flex-1 text-center px-3 py-1.5 border border-gray-300 rounded-md hover:bg-gray-50">Edit</a>
-                                        @if(!$property->archived_at)
-                                            <form method="POST" action="{{ route('vendor.properties.archive', $property) }}" class="flex-1" onsubmit="return confirm('Are you sure you want to archive this property?');">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="w-full text-center px-3 py-1.5 border border-red-300 text-red-600 rounded-md hover:bg-red-50">Archive</button>
-                                            </form>
-                                        @endif
-                                        @if(!$property->archived_at && $property->verification_status !== 'Verified' && $property->verification_status !== 'Under Review')
+                                        
+                                        @if($property->monitoringRequests->count() == 0)
                                             <form method="POST" action="{{ route('vendor.properties.submit-monitoring-request', $property) }}" class="flex-1">
                                                 @csrf
                                                 <button type="submit" class="w-full text-center px-3 py-1.5 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Request Verify</button>
@@ -90,8 +102,6 @@
                             </div>
                         @endforelse
                     </div>
-
-                    
                 </div>
             </div>
         </div>

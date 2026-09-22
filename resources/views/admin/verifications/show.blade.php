@@ -10,12 +10,11 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Inspection Report for {{ $inspection->property->title }}</h3>
-
                     <div class="mb-4">
                         <p><strong>Property:</strong> {{ $inspection->property->title }}</p>
                         <p><strong>Vendor:</strong> {{ $inspection->property->user->name }}</p>
                         <p><strong>Inspector:</strong> {{ $inspection->inspector->name }}</p>
-                        <p><strong>Inspection Status:</strong> {{ $inspection->inspection_status }}</p>
+                        <p><strong>Inspection Status:</strong> {{ ucfirst($inspection->recommendation) }}</p>
                         <p><strong>Scheduled At:</strong> {{ $inspection->scheduled_at?->format('M d, Y H:i A') ?? 'N/A' }}</p>
                         <p><strong>Completed At:</strong> {{ $inspection->completed_at?->format('M d, Y H:i A') ?? 'N/A' }}</p>
                         <p><strong>Inspector Notes:</strong> {{ $inspection->notes ?? 'N/A' }}</p>
@@ -62,7 +61,7 @@
 
                         <div class="mb-4">
                             <x-input-label for="reason" :value="__('Reason (for rejection, optional)')" />
-                            <x-textarea id="reason" name="reason" class="block mt-1 w-full" rows="3">{{ old('reason') }}</x-textarea>
+                            <x-text-input id="reason" name="reason" class="block mt-1 w-full" rows="3">{{ old('reason') }}</x-text-input>
                             <x-input-error class="mt-2" :messages="$errors->get('reason')" />
                         </div>
 

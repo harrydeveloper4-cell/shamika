@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Property;
 use App\Models\PropertyImage;
 use App\Models\MonitoringRequest;
@@ -20,7 +21,9 @@ class PropertyController extends Controller
             return view('admin.properties.index', compact('properties'));
         } else {
             Gate::authorize('view own properties');
-            $properties = auth()->user()->properties()->with('images')->latest()->get();
+            $properties = auth()->user()->properties()->with(['images', 'monitoringRequests' => function($query) {
+                $query->with('renter');
+            }])->latest()->get();
             return view('vendor.properties.index', compact('properties'));
         }
     }
@@ -31,7 +34,7 @@ class PropertyController extends Controller
         if(auth()->user()->hasRole('admin')){
             return view('admin.properties.show', compact('property'));
         }else{
-            Gate::authorize('view own property', $property);
+            // Gate::authorize('view own property', $property);
             return view('vendor.properties.show', compact('property'));
         }
     }
@@ -222,5 +225,11 @@ class PropertyController extends Controller
         ]);
 
         return back()->with('success', 'Monitoring request submitted successfully.');
+    }
+
+    public function bookingRequest()
+    {
+        $bookings = Booking::where('vendor_id', auth()->id())->with('property')->with('renter')->get();
+        return view('vendor.properties.booking-request', compact('bookings'));
     }
 }

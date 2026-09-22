@@ -19,7 +19,7 @@
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Property</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vendor</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requester</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned Inspector</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -30,7 +30,7 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $request->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap"><a href="#" class="text-indigo-600 hover:text-indigo-900">{{ $request->property->title }}</a></td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $request->vendor->name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $request->renter ? $request->renter->name : $request->vendor->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($request->status) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $request->assignedInspector ? $request->assignedInspector->name : 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">

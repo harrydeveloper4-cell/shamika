@@ -31,7 +31,9 @@ class IndexController extends Controller
 
     public function properties()
     {
-        $properties = Property::latest()->get();
+        $properties = Property::whereHas('inspections', function ($query) {
+            $query->where('recommendation', 'approve');
+        })->latest()->get();
         return view('properties', compact('properties'));
     }
 

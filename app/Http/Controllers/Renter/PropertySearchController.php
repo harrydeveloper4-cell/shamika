@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Models\MonitoringRequest;
 
 class PropertySearchController extends Controller
 {
@@ -13,8 +14,19 @@ class PropertySearchController extends Controller
     {
         Gate::authorize('search properties');
 
+        $userId = auth()->id();
+
         $query = Property::where('verification_status', 'Verified')
-            ->whereNotNull('published_at');
+            ->with('bookings')
+            ->where(function($q) use ($userId) {
+                $q->where('user_id', $userId) // Agar property ka vendor khud logged-in user hai
+                ->orWhereHas('bookings', function($subQuery) use ($userId) {
+                    $subQuery->where('renter_id', $userId);
+                            // ->orWhere('vendor_id', $userId);
+                });
+            });
+        // $query = Property::where('verification_status', 'Verified')->with('bookings')
+            // ->whereNotNull('published_at');
 
         // Apply filters
         if ($request->filled('location')) {
@@ -64,4 +76,33 @@ class PropertySearchController extends Controller
 
         return view('renter.properties.show', compact('property'));
     }
+
+    public function requestViewing(Request $request, Property $property)
+    {
+        Gate::authorize('request property viewing');
+
+        if ($property->user_id === auth()->id()) {
+            return back()->withErrors(['message' => 'You cannot request a viewing for your own property.']);
+        }
+
+        $existingRequest = MonitoringRequest::where('property_id', $property->id)
+            ->where('renter_id', auth()->id())
+            ->whereIn('status', ['pending', 'reviewed', 'assigned'])
+            ->first();
+
+        if ($existingRequest) {
+            return back()->with('info', 'You have already submitted a viewing request for this property.');
+        }
+
+        MonitoringRequest::create([
+            'property_id' => $property->id,
+            'renter_id' => auth()->id(),
+            'vendor_id' => $property->user_id, // The vendor is the owner of the property
+            'status' => 'pending',
+            'notes' => 'Renter requested a property viewing.',
+        ]);
+
+        return back()->with('success', 'Property viewing request submitted successfully. The property owner will be notified.');
+    }
 }
+

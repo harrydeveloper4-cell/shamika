@@ -12,6 +12,7 @@ class MonitoringRequest extends Model
 
     protected $fillable = [
         'property_id',
+        'renter_id',
         'vendor_id',
         'admin_id',
         'status',
@@ -46,5 +47,10 @@ class MonitoringRequest extends Model
     public function assignedInspector(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_inspector_id');
+    }
+
+    public function renter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'renter_id');
     }
 }

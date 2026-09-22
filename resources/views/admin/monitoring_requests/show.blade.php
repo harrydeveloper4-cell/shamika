@@ -13,7 +13,7 @@
 
                     <div class="mb-4">
                         <p><strong>Property:</strong> {{ $monitoringRequest->property->title }}</p>
-                        <p><strong>Vendor:</strong> {{ $monitoringRequest->vendor->name }}</p>
+                        <p><strong>Requester:</strong> {{ $monitoringRequest->renter ? $monitoringRequest->renter->name . ' (Renter)' : $monitoringRequest->vendor->name . ' (Vendor)' }}</p>
                         <p><strong>Current Status:</strong> {{ ucfirst($monitoringRequest->status) }}</p>
                         <p><strong>Submitted At:</strong> {{ $monitoringRequest->submitted_at->format('M d, Y H:i A') }}</p>
                         @if ($monitoringRequest->admin)

@@ -212,6 +212,10 @@ class AuthServiceProvider extends ServiceProvider
             return true;
         });
 
+        Gate::define('request property viewing', function (User $user) {
+            return $user->hasRole('renter');
+        });
+
         Gate::define('submit viewing request', function (User $user) {
             return $user->hasRole('renter') || $user->hasRole('admin');
         });

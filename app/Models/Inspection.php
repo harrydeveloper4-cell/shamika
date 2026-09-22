@@ -12,6 +12,7 @@ class Inspection extends Model
 
     protected $fillable = [
         'property_id',
+        'renter_id',
         'inspector_id',
         'status',
         'scheduled_at',
@@ -39,5 +40,10 @@ class Inspection extends Model
     public function inspector(): BelongsTo
     {
         return $this->belongsTo(User::class, 'inspector_id');
+    }
+
+    public function renter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'renter_id');
     }
 }

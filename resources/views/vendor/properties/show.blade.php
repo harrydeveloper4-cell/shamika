@@ -13,18 +13,6 @@
         </div>
     </x-slot>
 
-    <!-- Archived Alert -->
-    @if($property->archived_at)
-        <div class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl mb-6 text-sm flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
-                <span><strong>Note:</strong> This property is archived and may not be visible to renters.</span>
-            </div>
-        </div>
-    @endif
-
     <div class="space-y-6">
         <!-- Main Info Card -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -33,12 +21,19 @@
                 <div>
                     <div class="flex items-center space-x-3 mb-1">
                         <h3 class="text-xl font-bold text-slate-800">{{ $property->title }}</h3>
-                        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-semibold rounded-full 
-                            {{ $property->verification_status === 'Verified' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 
-                               ($property->verification_status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' : 
-                               ($property->verification_status === 'Under Review' ? 'bg-sky-50 text-sky-700 border border-sky-200' : 'bg-amber-50 text-amber-700 border border-amber-200')) }}">
-                            {{ $property->verification_status ?? 'Pending' }}
+                        @if($property->inspections()->count() > 0)
+                        <span class="px-2 py-0.5 text-xs rounded
+                            {{ $property->inspections[0]->recommendation === 'approve' ? 'bg-green-100 text-green-700' :
+                                ($property->inspections[0]->recommendation === 'rejecte' ? 'bg-red-100 text-red-700' :
+                                ($property->inspections[0]->recommendation === 'pending' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700')) }}">
+                            {{ ucfirst($property->inspections[0]->recommendation) }}
+                            @if($property->inspections[0]->recommendation === 'approve') ✓ @endif
                         </span>
+                        @else
+                        <span class="px-2 py-0.5 text-xs rounded bg-yellow-100 text-yellow-700">
+                            {{ $property->monitoringRequests()->count() > 0 ? ucfirst($property->monitoringRequests[0]->status) : 'Required to verification' }}
+                        </span>
+                        @endif
                     </div>
                     <p class="text-xs text-slate-500 flex items-center">
                         <svg class="w-4 h-4 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

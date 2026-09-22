@@ -74,7 +74,8 @@ class Property extends Model
     public function getMainImageUrlAttribute(): ?string
     {
         if ($this->main_image) {
-            return Storage::disk('public')->url($this->main_image);
+            // return Storage::disk('public')->url($this->main_image);
+            return asset($this->main_image);
         }
         return null;
     }

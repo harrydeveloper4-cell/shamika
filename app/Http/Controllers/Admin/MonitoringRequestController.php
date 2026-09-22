@@ -22,14 +22,14 @@ class MonitoringRequestController extends Controller
     public function index()
     {
         Gate::authorize('view monitoring requests');
-        $monitoringRequests = MonitoringRequest::with(['property', 'vendor', 'admin', 'assignedInspector'])->latest()->get();
+        $monitoringRequests = MonitoringRequest::with(['property', 'vendor', 'admin', 'assignedInspector', 'renter'])->latest()->get();
         return view('admin.monitoring_requests.index', compact('monitoringRequests'));
     }
 
     public function show(MonitoringRequest $monitoringRequest)
     {
         Gate::authorize('view monitoring requests');
-        $monitoringRequest->load(['property', 'vendor', 'admin', 'assignedInspector']);
+        $monitoringRequest->load(['property', 'vendor', 'admin', 'assignedInspector', 'renter']);
         $propertyManagementTeamMembers = User::role('property_management_team')->get();
         return view('admin.monitoring_requests.show', compact('monitoringRequest', 'propertyManagementTeamMembers'));
     }
@@ -71,7 +71,7 @@ class MonitoringRequestController extends Controller
             return back()->withErrors(['status' => 'Only reviewed monitoring requests can be assigned an inspector.']);
         }
 
-        $this->inspectionService->assignInspection($monitoringRequest->property, $inspector);
+        $this->inspectionService->assignInspection($monitoringRequest->property, $inspector, $monitoringRequest);
 
         $monitoringRequest->update([
             'assigned_inspector_id' => $inspector->id,

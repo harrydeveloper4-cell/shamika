@@ -29,12 +29,19 @@
 
                         <div class="mb-4">
                             <x-input-label :value="__('Roles')" />
-                            @foreach ($roles as $role)
-                                <div class="flex items-center mt-2">
-                                    <input type="checkbox" name="roles[]" id="role_{{ $role->name }}" value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                    <x-input-label for="role_{{ $role->name }}" class="ml-2 text-sm text-gray-600" :value="ucfirst(str_replace('_', ' ', $role->name))" />
-                                </div>
-                            @endforeach
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                @foreach ($roles as $role)
+                                    @php
+                                        $hasRole = $user->hasRole($role->name);
+                                    @endphp
+                                    <label for="role_{{ $role->name }}" class="flex items-center p-3 rounded-lg border cursor-pointer transition-all duration-150 {{ $hasRole ? 'bg-indigo-50 border-indigo-300 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50' }}">
+                                        <input type="checkbox" name="roles[]" id="role_{{ $role->name }}" value="{{ $role->name }}" {{ $hasRole ? 'checked' : '' }} class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 focus:ring-2">
+                                        <span class="ml-3 text-sm font-medium {{ $hasRole ? 'text-indigo-900 font-semibold' : 'text-gray-700' }}">
+                                            {{ ucfirst(str_replace('_', ' ', $role->name)) }}
+                                        </span>
+                                    </label>
+                                @endforeach
+                            </div>
                             <x-input-error class="mt-2" :messages="$errors->get('roles')" />
                         </div>
 

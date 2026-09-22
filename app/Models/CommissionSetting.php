@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class CommissionSetting extends Model
 {
     //
+    protected $fillable = [
+        'name',
+        'type',
+        'value',
+        'is_active',
+    ];
 }

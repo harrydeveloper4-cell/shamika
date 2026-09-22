@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900">
                     <form method="POST" action="{{ route('vendor.properties.store') }}" enctype="multipart/form-data">
                         @csrf
-
+                        <input type="hidden" name="purpose" value="rent">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="md:col-span-2">
                                 <x-input-label for="title" :value="__('Property Title')" />
@@ -42,7 +42,8 @@
                                 </select>
                                 <x-input-error :messages="$errors->get('type')" class="mt-2" />
                             </div>
-
+                            
+                            {{--
                             <div>
                                 <x-input-label for="purpose" :value="__('Purpose')" />
                                 <select id="purpose" name="purpose" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
@@ -52,14 +53,14 @@
                                 </select>
                                 <x-input-error :messages="$errors->get('purpose')" class="mt-2" />
                             </div>
-
+                            --}}
                             <div>
                                 <x-input-label for="price" :value="__('Price')" />
                                 <x-text-input id="price" class="block mt-1 w-full" type="number" step="0.01" min="0" name="price" :value="old('price')" required placeholder="e.g., 250000" />
                                 <x-input-error :messages="$errors->get('price')" class="mt-2" />
                             </div>
 
-                            <div class="grid grid-cols-3 gap-4">
+                            <div class="md:col-span-2 grid grid-cols-3 gap-4">
                                 <div>
                                     <x-input-label for="bedrooms" :value="__('Bedrooms')" />
                                     <x-text-input id="bedrooms" class="block mt-1 w-full" type="number" min="0" name="bedrooms" :value="old('bedrooms', 0)" />

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Role;
 use App\Models\Inqury;
+use App\Services\MailService;
 
 class UserController extends Controller
 {
@@ -21,17 +22,17 @@ class UserController extends Controller
     public function approveVendor(User $user)
     {
         Gate::authorize('manage vendors');
-        // Logic to approve vendor, e.g., assign a specific role or update a status field
-        // For now, let's assume assigning a 'approved_vendor' role or similar
-        $user->assignRole('approved_vendor');
+        $user->status = 1;
+        $user->save();
+        // vendor ko email jae k apna acount successfuly active ho gya he
         return back()->with('success', 'Vendor approved successfully.');
     }
 
     public function rejectVendor(User $user)
     {
         Gate::authorize('manage vendors');
-        // Logic to reject vendor
-        $user->assignRole('rejected_vendor');
+        $user->status = 0;
+        $user->save();
         return back()->with('success', 'Vendor rejected successfully.');
     }
 

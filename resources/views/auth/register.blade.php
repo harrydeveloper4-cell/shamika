@@ -70,12 +70,25 @@
               </div>
             </div>
 
-            <!-- Terms agreement checkbox -->
-            <div class="custom-control custom-checkbox mb-4">
-              <input type="checkbox" class="custom-control-input" id="termsCondition" required>
-              <label class="custom-control-label small text-muted" for="termsCondition">
-                I agree to the <a href="#" class="auth-link">Terms & Conditions</a> and <a href="#" class="auth-link">Privacy Policy</a>
-              </label>
+            <!-- Account Type Selection Cards -->
+            <div class="form-group mb-4">
+              <label class="form-label-custom d-block mb-2">Create Account AS</label>
+              <div class="row g-3">
+                <div class="col-6">
+                  <input type="radio" class="btn-check d-none" name="role" id="renter" value="renter" checked required>
+                  <label class="role-card w-100 p-3 text-center border rounded cursor-pointer" for="renter">
+                    <i class="fa-solid fa-user-tag d-block mb-1 fs-5 text-primary"></i>
+                    <span class="fw-bold d-block text-dark small">Renter</span>
+                  </label>
+                </div>
+                <div class="col-6">
+                  <input type="radio" class="btn-check d-none" name="role" id="vendor" value="vendor" required>
+                  <label class="role-card w-100 p-3 text-center border rounded cursor-pointer" for="vendor">
+                    <i class="fa-solid fa-store d-block mb-1 fs-5 text-primary"></i>
+                    <span class="fw-bold d-block text-dark small">Vendor</span>
+                  </label>
+                </div>
+              </div>
             </div>
 
             <!-- Submit Button -->
@@ -92,4 +105,23 @@
   </div>
 </section>
 
+@endsection
+
+@section('styles')
+<style>
+  .role-card {
+    transition: all 0.2s ease-in-out;
+    border-color: #e2e8f0 !important;
+    background-color: #f8fafc;
+  }
+  .role-card:hover {
+    border-color: #0284c7 !important;
+    background-color: #f0f9ff;
+  }
+  input[type="radio"]:checked + .role-card {
+    border-color: #0284c7 !important;
+    background-color: #e0f2fe;
+    box-shadow: 0 0 0 1px #0284c7;
+  }
+</style>
 @endsection
