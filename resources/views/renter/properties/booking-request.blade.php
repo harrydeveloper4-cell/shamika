@@ -38,11 +38,12 @@
                                         <button @click="selectedBooking = {{ json_encode($booking) }}; openModal = true" class="text-indigo-600 hover:text-indigo-900 focus:outline-none">
                                             View Details
                                         </button>
-                                        @if($booking->status == 'pending')
-                                        <a href="{{ route('booking-request.accept-to-pay', $booking->id) }}" class="text-green-600 hover:text-red-900 focus:outline-none">
-                                            Accept Request to pay 
+                                        @if($booking->status == 'confirmed')
+                                        <a href="{{ route('renter.booking-request.paynow', encrypt($booking->id)) }}" class="text-green-600 hover:text-red-900 focus:outline-none">
+                                            Pay Now 
                                         </a>
                                         @endif
+                                        
                                     </td>
                                 </tr>
                             @empty

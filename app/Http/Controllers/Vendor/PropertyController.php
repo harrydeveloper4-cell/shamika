@@ -223,6 +223,9 @@ class PropertyController extends Controller
             'vendor_id' => auth()->id(),
             'status' => 'Pending',
         ]);
+        $property->update([
+            'verification_status' => 'Under Review',
+        ]);
 
         return back()->with('success', 'Monitoring request submitted successfully.');
     }

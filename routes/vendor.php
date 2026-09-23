@@ -15,6 +15,7 @@ Route::middleware(['auth', 'role:vendor'])->prefix('vendor')->name('vendor.')->g
 
     // Booking Request
     Route::get('/booking-request', [PropertyController::class, 'bookingRequest'])->name('booking.request');
+    Route::get('/booking-requests/{id}', [PropertyController::class, 'showBookingDetail'])->name('booking-request.show');
     // Monitoring Request
     Route::post('/properties/{property}/submit-monitoring-request', [PropertyController::class, 'submitMonitoringRequest'])->name('properties.submit-monitoring-request');
 });

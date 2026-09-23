@@ -38,6 +38,7 @@
                     <tr class="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                         <th class="py-3.5 px-6">Image</th>
                         <th class="py-3.5 px-6">Property</th>
+                        <th class="py-3.5 px-6">Vendor</th>
                         <th class="py-3.5 px-6">Location</th>
                         <th class="py-3.5 px-6">Price</th>
                         <th class="py-3.5 px-6">Specs</th>
@@ -72,6 +73,11 @@
                                         </span>
                                     @endif
                                 </div>
+                            </td>
+
+                            <!-- Vendor -->
+                            <td class="py-4 px-6 text-slate-600 text-xs">
+                                {{ $property->user->name }}
                             </td>
 
                             <!-- Location -->

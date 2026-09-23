@@ -33,8 +33,6 @@ class VerificationController extends Controller
             ->where('status', 'Report Submitted')
             ->latest()->get();
 
-
-
         return view('admin.verifications.index', compact('inspections'));
     }
 

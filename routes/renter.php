@@ -7,6 +7,7 @@ Route::middleware(['web', 'auth', 'role:renter'])->prefix('renter')->name('rente
     Route::get('/properties', [PropertySearchController::class, 'index'])->name('properties.index');
     Route::get('/properties/{property}', [PropertySearchController::class, 'show'])->name('properties.show');
     Route::post('/properties/{property}/request-viewing', [PropertySearchController::class, 'requestViewing'])->name('properties.requestViewing');
+    Route::get('/bookings', [PropertySearchController::class, 'bookingRequest'])->name('properties.bookingRequest');
 });
 
 // Public routes for property search and viewing (without authentication)

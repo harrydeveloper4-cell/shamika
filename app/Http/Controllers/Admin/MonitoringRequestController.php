@@ -50,6 +50,11 @@ class MonitoringRequestController extends Controller
             'reviewed_at' => now(),
         ]);
 
+        $property = $monitoringRequest->property;
+        $property->update([
+            'verification_status' => $request->status === 'rejected'?'Rejected':($request->status === 'reviewed'?'Under Review':'Pending'),
+        ]);
+
         return back()->with('success', 'Monitoring request reviewed successfully.');
     }
 
@@ -77,6 +82,11 @@ class MonitoringRequestController extends Controller
             'assigned_inspector_id' => $inspector->id,
             'assigned_at' => now(),
             'status' => 'assigned',
+        ]);
+
+        $property = $monitoringRequest->property;
+        $property->update([
+            'verification_status' => "Under Review",
         ]);
 
         return back()->with('success', 'Inspector assigned successfully.');

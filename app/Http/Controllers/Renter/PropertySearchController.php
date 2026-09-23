@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Renter;
 
 use App\Http\Controllers\Controller;
 use App\Models\Property;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Models\MonitoringRequest;
@@ -103,6 +104,13 @@ class PropertySearchController extends Controller
         ]);
 
         return back()->with('success', 'Property viewing request submitted successfully. The property owner will be notified.');
+    }
+
+    public function bookingRequest()
+    {
+        $userId = auth()->id();
+        $bookings = Booking::where('renter_id', $userId)->with(['property', 'vendor'])->get();
+        return view('renter.properties.booking-request', compact('bookings'));
     }
 }
 
