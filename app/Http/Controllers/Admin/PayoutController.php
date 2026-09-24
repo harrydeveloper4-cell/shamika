@@ -13,7 +13,7 @@ class PayoutController extends Controller
     public function index()
     {
         Gate::authorize('manage vendor payouts');
-        $payouts = Payout::with('vendor')->latest()->get();
+        $payouts = Payout::with('booking')->latest()->get();
         return view('admin.payouts.index', compact('payouts'));
     }
 
@@ -67,20 +67,17 @@ class PayoutController extends Controller
         Gate::authorize('manage vendor payouts');
 
         $request->validate([
-            'vendor_id' => 'required|exists:users,id',
-            'amount' => 'required|numeric|min:0',
+            'transaction_id' => 'required|string|max:255',
             'payout_date' => 'required|date',
-            'status' => 'required|in:pending,processing,completed,failed',
-            'transaction_id' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ]);
 
-        $vendor = User::findOrFail($request->vendor_id);
-        if (!$vendor->hasRole('vendor')) {
-            return back()->withErrors(['vendor_id' => 'The selected user is not a vendor.']);
-        }
-
-        $payout->update($request->all());
+        $payout->update([
+            'transaction_id' => $request->transaction_id,
+            'payout_date' => $request->payout_date,
+            'notes' => $request->notes,
+            'status' => 'completed', // Ya jo bhi status aap rakhna chahein (jaise completed ya approved)
+        ]);
 
         return redirect()->route('admin.payouts.index')->with('success', 'Payout updated successfully.');
     }

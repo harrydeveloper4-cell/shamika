@@ -41,7 +41,7 @@ Route::post('/submit_inquiry', [IndexController::class, 'submit_inquiry'])->name
 // });
 
 Route::middleware(['auth', 'role:admin|vendor'])->group(function () {
-    Route::get('/booking-request-accept-to-pay/{booking}', [IndexController::class, 'acceptToPay'])->name('booking-request.accept-to-pay');
+    Route::get('/accept-request-accept-to-pay/{booking}', [IndexController::class, 'acceptToPay'])->name('booking-request.accept-to-pay');
 });
 
 Route::middleware(['auth', 'role:renter'])->group(function () {

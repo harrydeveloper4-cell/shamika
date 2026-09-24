@@ -72,7 +72,8 @@
                                 <x-input-label for="purpose" :value="__('Purpose')" />
                                 <select id="purpose" name="purpose" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                     <option value="">Select Purpose</option>
-                                    <option value="sell" {{ old('purpose') === 'sell' ? 'selected' : '' }}>For Sale</option>
+
+                                    <!-- <option value="sell" {{ old('purpose') === 'sell' ? 'selected' : '' }}>For Sale</option> -->
                                     <option value="rent" {{ old('purpose') === 'rent' ? 'selected' : '' }}>For Rent</option>
                                 </select>
                                 <x-input-error :messages="$errors->get('purpose')" class="mt-2" />

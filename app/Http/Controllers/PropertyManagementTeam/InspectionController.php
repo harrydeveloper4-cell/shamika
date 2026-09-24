@@ -22,6 +22,7 @@ class InspectionController extends Controller
     {
         Gate::authorize('view assigned inspections');
         $inspections = auth()->user()->inspections()->with('property')->latest()->get();
+        
         return view('pm_team.inspections.index', compact('inspections'));
     }
 
@@ -65,8 +66,18 @@ class InspectionController extends Controller
         $request->validate([
             'recommendation' => 'required|in:approve,reject',
         ]);
-
+        
         $this->inspectionService->submitReport($inspection, $request->recommendation);
+
+        if($request->recommendation == 'approve'){
+            $inspection->property->update([
+                'verification_status' => 'Verified',
+            ]);
+        }else{
+            $inspection->property->update([
+                'verification_status' => 'Rejected',
+            ]);
+        }
 
         return back()->with('success', 'Inspection report submitted successfully.');
     }

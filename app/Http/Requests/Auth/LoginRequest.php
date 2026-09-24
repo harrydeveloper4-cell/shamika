@@ -41,15 +41,18 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
-
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
-
+        if (Auth::user()->status != 1) {
+            Auth::logout(); // User ko foran logout kar dein
+            throw ValidationException::withMessages([
+                'email' => 'Your account is not active or approved yet.', // Aap yahan apni marzi ka message likh sakte hain
+            ]);
+        }
         RateLimiter::clear($this->throttleKey());
     }
 

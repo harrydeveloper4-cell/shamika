@@ -37,7 +37,7 @@
                             <div class="mb-4">
                                 <x-input-label for="status" :value="__('Decision')" />
                                 <select name="status" id="status" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                    <option value="" {{ $monitoringRequest->status === 'reviewed' ? 'selected' : '' }}>Mark as Reviewed</option>
+                                    <option value="reviewed" {{ $monitoringRequest->status === 'reviewed' ? 'selected' : '' }}>Mark as Reviewed</option>
                                     <option value="rejected" {{ $monitoringRequest->status === 'rejected' ? 'selected' : '' }}>Reject Request</option>
                                 </select>
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />

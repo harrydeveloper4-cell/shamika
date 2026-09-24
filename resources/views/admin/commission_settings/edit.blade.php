@@ -24,7 +24,7 @@
                         <div class="mb-4">
                             <x-input-label for="type" :value="__('Type')" />
                             <select name="type" id="type" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                                <option value="fixed" {{ old('type', $commissionSetting->type) === 'fixed' ? 'selected' : '' }}>Fixed Amount</option>
+                                <!-- <option value="fixed" {{ old('type', $commissionSetting->type) === 'fixed' ? 'selected' : '' }}>Fixed Amount</option> -->
                                 <option value="percentage" {{ old('type', $commissionSetting->type) === 'percentage' ? 'selected' : '' }}>Percentage</option>
                             </select>
                             <x-input-error class="mt-2" :messages="$errors->get('type')" />

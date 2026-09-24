@@ -73,7 +73,6 @@
                 <!-- Navigation Links -->
                 <nav class="flex-1 px-4 py-6 space-y-6 overflow-y-auto">
 
-                    <!-- COMMON: Dashboard Home -->
                     <div>
                         <div class="space-y-1">
                             <a href="{{ route('dashboard') }}"
@@ -86,7 +85,6 @@
                         </div>
                     </div>
 
-                    <!-- 1. ADMIN ONLY MODULES -->
                     @hasrole('admin')
                     <div>
                         <p class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Platform Control</p>
@@ -113,7 +111,6 @@
                     </div>
                     @endhasrole
 
-                    <!-- 2. PROPERTY MANAGEMENT TEAM & ADMIN (Inspections Workflow) -->
                     @hasanyrole('admin|property_management_team')
                     <div>
                         <p class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Field Operations</p>
@@ -123,6 +120,16 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                 </svg>
                                 <span>{{ auth()->user()->hasRole('admin') ? 'Manage Inspections' : 'Assigned Inspections' }}</span>
+
+                                @php
+                                    $pendingInspectionsCount = auth()->user()->inspections()->where('recommendation', 'pending')->count();
+                                @endphp
+                                @if($pendingInspectionsCount > 0)
+                                <span class="ml-auto text-xs font-bold text-white bg-red-600 px-2.5 py-0.5 rounded-full">
+                                    {{ $pendingInspectionsCount }}
+                                </span>
+                                @endif
+
                             </a>
                         </div>
                     </div>
@@ -139,7 +146,6 @@
                                 </svg>
                                 <span>{{ auth()->user()->hasRole('admin') ? 'Company Properties' : 'My Properties' }}</span>
                             </a>
-
                         </div>
 
                         <div class="space-y-1">
@@ -149,8 +155,17 @@
                                 </svg>
                                 <span>Property Booking Request</span>
                             </a>
-
                         </div>
+
+                        <div class="space-y-1">
+                            <a href="{{ route('vendor.commissions.index') }}" class="flex items-center px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>Commissions & Payouts</span>
+                            </a>
+                        </div>
+
                     </div>
                     @endhasanyrole
 

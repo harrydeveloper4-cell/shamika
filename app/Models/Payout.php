@@ -11,7 +11,7 @@ class Payout extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vendor_id',
+        'booking_id',
         'amount',
         'status',
         'transaction_id',
@@ -23,8 +23,8 @@ class Payout extends Model
         'payout_date' => 'datetime',
     ];
 
-    public function vendor(): BelongsTo
+    public function booking(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'vendor_id');
+        return $this->belongsTo(Booking::class, 'booking_id');
     }
 }

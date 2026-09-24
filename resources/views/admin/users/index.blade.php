@@ -24,6 +24,7 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($users as $user)
+                                @if($user->id != auth()->user()->id)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $user->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $user->email }}</td>
@@ -40,20 +41,27 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="{{ route('admin.users.edit', $user) }}" class="text-indigo-600 hover:text-indigo-900">Edit Roles</a>
+                                        
                                         @if ($user->hasRole('vendor'))
-                                            <form action="{{ route('admin.vendors.approve', $user) }}" method="POST" class="inline-block ml-2">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="text-green-600 hover:text-green-900">Approve Vendor</button>
-                                            </form>
+
+                                            @if ($user->status === 1)
                                             <form action="{{ route('admin.vendors.reject', $user) }}" method="POST" class="inline-block ml-2">
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="text-red-600 hover:text-red-900">Reject Vendor</button>
                                             </form>
+                                            @else
+                                            <form action="{{ route('admin.vendors.approve', $user) }}" method="POST" class="inline-block ml-2">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="text-green-600 hover:text-green-900">Approve Vendor</button>
+                                            </form>
+                                            @endif
                                         @endif
+                                        
                                     </td>
                                 </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>

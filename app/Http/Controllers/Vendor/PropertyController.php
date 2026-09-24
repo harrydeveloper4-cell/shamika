@@ -110,6 +110,16 @@ class PropertyController extends Controller
         }
 
         if(auth()->user()->hasRole('admin')){
+
+            MonitoringRequest::create([
+                'property_id' => $property->id,
+                'vendor_id' => auth()->id(),
+                'status' => 'Pending',
+            ]);
+            $property->update([
+                'verification_status' => 'Under Review',
+            ]);
+
             return redirect()->route('admin.properties.index')->with('success', 'Property created successfully.');
         }else{
             return redirect()->route('vendor.properties.index')->with('success', 'Property created successfully.');
@@ -233,6 +243,11 @@ class PropertyController extends Controller
     public function bookingRequest()
     {
         $bookings = Booking::where('vendor_id', auth()->id())->with('property')->with('renter')->get();
-        return view('vendor.properties.booking-request', compact('bookings'));
+        if(auth()->user()->hasRole('admin')){
+            return view('admin.properties.booking-request', compact('bookings'));
+        } else {
+            return view('vendor.properties.booking-request', compact('bookings'));
+        }
     }
 }
+

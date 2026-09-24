@@ -94,7 +94,12 @@ class IndexController extends Controller
             'status' => 'confirmed',
         ]);
 
-        return Redirect::route('vendor.booking.request')->with('status', 'booking-request-accepted');
+        if(auth()->user()->hasRole('admin')){
+            return Redirect::route('admin.booking.request')->with('status', 'booking-request-accepted');
+        }else{
+            return Redirect::route('vendor.booking.request')->with('status', 'booking-request-accepted');
+        }
+
     }
 
     public function paynow($encryptedId)

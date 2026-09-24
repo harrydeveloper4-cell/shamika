@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Vendor\PropertyController;
 
 Route::middleware(['auth', 'role:vendor'])->prefix('vendor')->name('vendor.')->group(function () {
@@ -18,4 +19,8 @@ Route::middleware(['auth', 'role:vendor'])->prefix('vendor')->name('vendor.')->g
     Route::get('/booking-requests/{id}', [PropertyController::class, 'showBookingDetail'])->name('booking-request.show');
     // Monitoring Request
     Route::post('/properties/{property}/submit-monitoring-request', [PropertyController::class, 'submitMonitoringRequest'])->name('properties.submit-monitoring-request');
+
+    // Payout Request
+    Route::get('/commissions', [DashboardController::class, 'commissions'])->name('commissions.index');
+    Route::get('/payout-request/{booking}', [DashboardController::class, 'payoutRequest'])->name('payout.request');
 });

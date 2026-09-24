@@ -49,4 +49,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('/testimonials', TestimonialController::class);
     Route::get('/inquries', [UserController::class, 'inquries'])->name('inquries.index');    
     Route::delete('/inquries/{inquiry}', [UserController::class, 'destroy'])->name('inquries.destroy');
+
+
+    // Booking Request
+    Route::get('/booking-request', [PropertyController::class, 'bookingRequest'])->name('booking.request');
+    Route::get('/booking-requests/{id}', [PropertyController::class, 'showBookingDetail'])->name('booking-request.show');
+    // Monitoring Request
+    Route::post('/properties/{property}/submit-monitoring-request', [PropertyController::class, 'submitMonitoringRequest'])->name('properties.submit-monitoring-request');
 });

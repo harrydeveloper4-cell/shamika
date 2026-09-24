@@ -96,6 +96,15 @@
                                class="flex items-center px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.monitoring-requests.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' }}">
                                 <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 <span>Monitoring Requests</span>
+                                
+                                @php
+                                    $unassignedRequestsCount = App\Models\MonitoringRequest::whereNull('assigned_inspector_id')->count();
+                                @endphp
+                                @if($unassignedRequestsCount > 0)
+                                <span class="ml-auto text-xs font-bold text-white bg-red-600 px-2.5 py-0.5 rounded-full">
+                                    {{ $unassignedRequestsCount }}
+                                </span>
+                                @endif
                             </a>
 
                             <!-- Verifications -->
@@ -110,14 +119,13 @@
                     <div>
                         <p class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Billing & Finance</p>
                         <div class="space-y-1">
-                            {{--
-                            <!-- Subscriptions -->
-                            <a href="{{ route('admin.subscription-plans.index') }}" 
-                               class="flex items-center px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.subscription-plans.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' }}">
-                                <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                                <span>Subscriptions</span>
+                               
+                            <!-- Commissions -->
+                            <a href="{{ route('admin.booking.request') }}" 
+                               class="flex items-center px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.booking.request') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60' }}">
+                                <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span>Property Booking Request</span>
                             </a>
-                            --}}
 
                             <!-- Commissions -->
                             <a href="{{ route('admin.commission-settings.index') }}" 

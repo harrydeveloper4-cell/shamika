@@ -46,12 +46,12 @@ class RegisteredUserController extends Controller
             // 'status' => $request->role === 'renter' ? 1 : 2,
         ]);
 
-        $user->assignRole($request->role);
+        $user->syncRoles([$request->role]);
 
         MailService::sendRegistrationEmail($user, $request->role);
 
         event(new Registered($user));
-
+        
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
