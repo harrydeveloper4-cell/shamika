@@ -12,8 +12,12 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
     <!-- Tailwind CSS CDN Fallback for instant rendering -->
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -248,14 +252,16 @@
 
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6 md:p-8">
-                <div class="max-w-7xl mx-auto">
+                <div class="w-full">
                     {{ $slot }}
                 </div>
             </main>
 
         </div>
     </div>
-
+    <!-- jQuery & DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </body>
 
 </html>

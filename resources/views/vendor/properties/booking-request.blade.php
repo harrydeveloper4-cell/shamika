@@ -8,92 +8,94 @@
     <!-- Alpine.js data container -->
     <div class="py-12" x-data="{ openModal: false, selectedBooking: {} }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Booking Properties Requests</h3>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-xl border border-slate-200">
+                <div class="p-6 text-slate-800">
+                    <h3 class="text-base font-semibold text-slate-800 mb-4">Booking Properties Requests</h3>
 
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Property</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Renter</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking Date</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($bookings as $booking)
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $booking->property->title ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $booking->renter->name ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($booking->booking_date)->format('M d, Y') }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            {{ ucfirst($booking->status) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <!-- View Details Button -->
-                                        <button @click="selectedBooking = {{ json_encode($booking) }}; openModal = true" class="text-indigo-600 hover:text-indigo-900 focus:outline-none">
-                                            View Details
-                                        </button>
-                                        @if($booking->status == 'pending')
-                                        <a href="{{ route('booking-request.accept-to-pay', $booking->id) }}" class="text-green-600 hover:text-red-900 focus:outline-none">
-                                            Accept Request to pay 
-                                        </a>
-                                        @endif
-                                    </td>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Property</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Renter</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Booking Date</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No booking requests found.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-slate-200">
+                                @forelse ($bookings as $booking)
+                                    <tr class="hover:bg-slate-50/50 transition">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">{{ $booking->property->title ?? 'N/A' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{ $booking->renter->name ?? 'N/A' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{ \Carbon\Carbon::parse($booking->booking_date)->format('M d, Y') }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2.5 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-amber-50 text-amber-700 border border-amber-100">
+                                                {{ ucfirst($booking->status) }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-right space-x-3">
+                                            <!-- View Details Button -->
+                                            <button @click="selectedBooking = {{ json_encode($booking) }}; openModal = true" class="text-indigo-600 hover:text-indigo-900 font-semibold focus:outline-none">
+                                                View Details
+                                            </button>
+                                            @if($booking->status == 'pending')
+                                                <a href="{{ route('booking-request.accept-to-pay', $booking->id) }}" class="text-emerald-600 hover:text-emerald-900 font-semibold focus:outline-none">
+                                                    Accept Request to pay 
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-12 text-center text-slate-500 text-sm">No booking requests found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- POPUP MODAL -->
-        <div x-show="openModal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 flex items-center justify-center p-4" style="display: none;">
-            <div @click.away="openModal = false" class="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6 relative">
+        <div x-show="openModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4" style="display: none;">
+            <div @click.away="openModal = false" class="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6 relative">
                 
                 <!-- Close Button -->
-                <button @click="openModal = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                <button @click="openModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
                 
-                <h3 class="text-xl font-bold text-gray-900 mb-4 border-b pb-2">Booking Request Details</h3>
+                <h3 class="text-lg font-semibold text-slate-800 mb-4 pb-2 border-b border-slate-100">Booking Request Details</h3>
 
-                <div class="space-y-4 text-sm text-gray-700">
+                <div class="space-y-4 text-sm text-slate-600">
                     <!-- Booking Info -->
-                    <div class="bg-gray-50 p-3 rounded">
-                        <p class="font-semibold text-gray-900 mb-1">Booking Info:</p>
-                        <p><strong>Booking ID:</strong> #<span x-text="selectedBooking.id"></span></p>
-                        <p><strong>Booking Date:</strong> <span x-text="selectedBooking.booking_date"></span></p>
-                        <p><strong>Status:</strong> <span class="capitalize font-semibold text-yellow-600" x-text="selectedBooking.status"></span></p>
+                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-100">
+                        <p class="font-semibold text-slate-800 mb-1.5">Booking Info:</p>
+                        <p class="mb-1"><strong>Booking ID:</strong> #<span x-text="selectedBooking.id"></span></p>
+                        <p class="mb-1"><strong>Booking Date:</strong> <span x-text="selectedBooking.booking_date"></span></p>
+                        <p class="mb-1"><strong>Status:</strong> <span class="capitalize font-semibold text-amber-600" x-text="selectedBooking.status"></span></p>
                         <p><strong>Notes:</strong> <span x-text="selectedBooking.notes ?? 'N/A'"></span></p>
                     </div>
 
                     <!-- Property Info -->
-                    <div class="bg-gray-50 p-3 rounded">
-                        <p class="font-semibold text-gray-900 mb-1">Property Details:</p>
-                        <p><strong>Title:</strong> <span x-text="selectedBooking.property ? selectedBooking.property.title : 'N/A'"></span></p>
-                        <p><strong>Address:</strong> <span x-text="selectedBooking.property ? selectedBooking.property.address + ', ' + selectedBooking.property.city : 'N/A'"></span></p>
+                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-100">
+                        <p class="font-semibold text-slate-800 mb-1.5">Property Details:</p>
+                        <p class="mb-1"><strong>Title:</strong> <span x-text="selectedBooking.property ? selectedBooking.property.title : 'N/A'"></span></p>
+                        <p class="mb-1"><strong>Address:</strong> <span x-text="selectedBooking.property ? selectedBooking.property.address + ', ' + selectedBooking.property.city : 'N/A'"></span></p>
                         <p><strong>Price:</strong> $<span x-text="selectedBooking.property ? selectedBooking.property.price : 'N/A'"></span></p>
                     </div>
 
                     <!-- Renter Info -->
-                    <div class="bg-gray-50 p-3 rounded">
-                        <p class="font-semibold text-gray-900 mb-1">Renter / User Details:</p>
-                        <p><strong>Name:</strong> <span x-text="selectedBooking.renter ? selectedBooking.renter.name : 'N/A'"></span></p>
+                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-100">
+                        <p class="font-semibold text-slate-800 mb-1.5">Renter / User Details:</p>
+                        <p class="mb-1"><strong>Name:</strong> <span x-text="selectedBooking.renter ? selectedBooking.renter.name : 'N/A'"></span></p>
                         <p><strong>Email:</strong> <span x-text="selectedBooking.renter ? selectedBooking.renter.email : 'N/A'"></span></p>
                     </div>
                 </div>
 
                 <!-- Modal Footer -->
                 <div class="mt-6 flex justify-end">
-                    <button @click="openModal = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 text-sm">Close</button>
+                    <button @click="openModal = false" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-md text-xs font-semibold transition">Close</button>
                 </div>
             </div>
         </div>
